@@ -1,0 +1,128 @@
+Here is your corrected document with all grammar and spelling mistakes fixed. I kept the original wording as requested:
+
+---
+
+**Name:**
+Sidak Singh
+**Date:**
+Tue May 6, 2025
+
+---
+
+### **Student Exploration: Magnetic Induction**
+
+**Directions:** Follow the instructions to go through the simulation. Respond to the questions and prompts in the orange boxes.
+
+**Vocabulary:** current, induced magnetic field, magnetic field, Pythagorean Theorem, right-hand rule
+
+---
+
+### **Prior Knowledge Questions (Do these BEFORE using the Gizmo.)**
+
+**Where does the needle on a compass normally point?**
+The needle on a compass usually points towards Earth's magnetic north.
+
+**What will happen to the compass needle if you hold a magnet close to it?**
+The red point of a compass needle would point towards the magnetic south of the magnet.
+
+---
+
+### **Gizmo Warm-up**
+
+A compass is a useful tool for measuring the direction of a magnetic induction field—more commonly called a magnetic field—because the needle's northern tip points in the direction of a field. In the Magnetic Induction Gizmo, you will use compasses to measure the magnetic field caused by a current.
+
+The left side of the Gizmo shows an overhead and front view of a table with a wire threaded vertically through its center, perpendicular to the surface of the table. Check that the **Current** is set to 0 amps.
+
+**Drag a compass to several different locations on the table. Where does the compass needle point?**
+The red tip of the compass is aligned with the Earth's magnetic field and is pointing towards north.
+
+The effect you see is due to Earth's magnetic field.
+
+**Slowly increase the Current value from 0 to 60 amps. Describe what happens:**
+The red needle of the compass starts to rotate and is no longer aligned to the magnetic poles of Earth.
+
+**Move the compass around on the table. What do you notice?**
+As you move the compass around, you begin to see that the red needle of the compass is aligned as a tangent of an invisible circle around the wire in the middle.
+
+---
+
+### **Activity A: Observing induction**
+
+**Get the Gizmo ready:**
+Set the **Current** to 0 amps.
+
+**Goal:** Use compasses to determine the direction of the magnetic field induced by a current in a wire.
+
+**Predict:** Place the compasses in a circle around the wire as shown at right. What do you think will happen as you slowly drag the Current slider all the way to the right?
+All the compass tips will align with each other in a circle, joining the red side of the compass with the white leg of the compass in front of it, creating tangent lines with the wire in the center.
+
+**Test:** Use the Gizmo to test your prediction. Describe the results:
+The results were the same as predicted. All the compasses' red needles aligned with the white needles of the compasses in front, creating tangent lines around the center wire.
+
+**Observe:** Look at the **Front view**.
+**In which direction is the current moving through the wire?**
+The current starts from the positive side of the battery and goes towards the negative side—so, going from the bottom to the top.
+
+(Note: By convention, the current direction shown is the direction of positive charge. In reality, electrons move in the opposite direction through the wire.)
+
+**Predict:** Scientists use the right-hand rule to predict the direction of an induced magnetic field—or a magnetic field created by a current. To use the right-hand rule, position your right hand so that the thumb points in the direction of the current. The magnetic field lines wrap around the wire in the same direction as the fingers of your right hand.
+
+**If the current was pointed down, will the induced magnetic field be clockwise or counterclockwise?**
+Clockwise
+
+**Test:** Set the **Current** to -60 amps.
+
+**A.** In which direction is the current now moving through the wire?
+It is going from top to bottom now.
+
+**B.** What is the direction of the induced magnetic field?
+Clockwise
+
+**On your own:** Use a battery, wire, and small compass to demonstrate magnetic induction. Describe your results in your science journal or notebook.
+
+---
+
+### **Activity B: Magnetic field interactions**
+
+**Get the Gizmo ready:**
+Remove all the compasses from the table.
+Turn on **Show grid** and **Show magnetic field sensor**.
+Set the **Current** to 0 Amps.
+
+**Question:** How does Earth's magnetic field interact with an induced magnetic field?
+
+**Experiment:** You can use the probe to measure the strength of the magnetic field (represented by the symbol **B**) at various locations on the grid. The unit for magnetic field strength is the **gauss (G)**. Move the probe to different places on the grid.
+
+**What is the strength of the magnetic field?**
+The strength of the magnetic field on the entire grid is 0.5 G.
+
+**Why is there a magnetic field even when there is no current?**
+The magnetic field detected belongs to the geomagnetic field, which is caused by electrical currents flowing in the slowly moving molten iron.
+
+**Observe:** Set the **Current** to 50 amps. Place the probe at point (50, 0).
+
+**What is the strength of the field?**
+2.5 G
+
+To find the strength of the induced magnetic field alone, subtract the strength of Earth's magnetic field from the value you measured in part A.
+
+**What is the strength of the induced magnetic field alone?**
+2 G
+
+**Compare:** Now, move the probe to (-50, 0).
+
+**A.** What is the total strength of the field?
+1.5 G
+
+**B.** How does this compare to the strength of the field at point (50, 0)?
+0.5 G less than the magnetic field at point (50, 0)
+
+**Infer:** What do you think can account for the difference in field strengths at positions (50, 0) and (-50, 0)?
+I think maybe Earth's magnetic field could help account for the difference, assuming that it is increasing the total value when the direction is positive and decreasing the total value when the direction is negative.
+
+**Observe:** Place compasses at (50, 0) and (-50, 0). Use your observations to explain why the field strength is greater at position (50, 0).
+Before inducing a current in the electrical wire, we can observe that the compass at point (50, 0) is already facing the north direction due to Earth's geomagnetic pull, and the electromagnet, when turned on, also faces in that direction. This leads to the gravitational pull being added. Meanwhile, the compass at (-50, 0) originally faces north with the electromagnet turned off and starts facing south when the electromagnet is turned on. So it has to fight Earth's geomagnetic pull due to it opposing in direction.
+
+---
+
+Let me know if you'd like this formatted as a printable document or in another style.
