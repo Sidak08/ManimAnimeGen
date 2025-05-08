@@ -8,6 +8,7 @@ import h5py
 from tqdm import tqdm
 
 def create_ml_dataset(math_dataset_path, output_dir):
+    import re  # Import for regex patterns
     """Create a machine learning dataset from the enhanced math dataset"""
     with open(math_dataset_path, 'r', encoding='utf-8') as f:
         dataset = json.load(f)
@@ -27,37 +28,135 @@ def create_ml_dataset(math_dataset_path, output_dir):
     # Find all extracted frames
     all_frames = []
     frame_dirs = []
+    scene_frame_matches = {}
     
-    # Look for frame directories
+    # First pass: collect all frame directories
+    collected_frame_dirs = []
+    search_dirs = [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(math_dataset_path))), "media", "videos"),
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(math_dataset_path))), "videos"),
+        "../media/videos",
+        "../videos"
+    ]
+    
+    for base_dir in search_dirs:
+        if not os.path.exists(base_dir):
+            continue
+        for root, dirs, files in os.walk(base_dir):
+            if "frames_" in root and os.path.exists(root):
+                collected_frame_dirs.append(root)
+    
+    print(f"Found {len(collected_frame_dirs)} frame directories")
+    
+    # Function to calculate matching score between scene and frame directory
+    def calculate_scene_frame_match(scene_name, frame_dir):
+        score = 0
+        dir_name = os.path.basename(frame_dir)
+        parent_dir = os.path.basename(os.path.dirname(frame_dir))
+        
+        # Exact match gets highest score
+        if scene_name.lower() in dir_name.lower():
+            score += 50
+        
+        # Parent directory matches scene name
+        if scene_name.lower() in parent_dir.lower():
+            score += 30
+        
+        # Check for scene name in the full path
+        if scene_name.lower() in frame_dir.lower():
+            score += 20
+            
+        # Check for partial matches in directory name
+        scene_words = set(scene_name.replace("_", " ").lower().split())
+        dir_words = set(dir_name.replace("_", " ").lower().split())
+        parent_words = set(parent_dir.replace("_", " ").lower().split())
+        
+        matching_words_dir = scene_words.intersection(dir_words)
+        matching_words_parent = scene_words.intersection(parent_words)
+        
+        score += len(matching_words_dir) * 5
+        score += len(matching_words_parent) * 3
+        
+        return score
+    
+    # Score all frame directories for each scene
     for scene_data in dataset:
         scene_name = scene_data['scene_name']
-        # Look for frame directories in common locations
-        search_dirs = [
-            os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(math_dataset_path))), "media", "videos"),
-            os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(math_dataset_path))), "videos"),
-            "../media/videos",
-            "../videos"
-        ]
-            
         print(f"Looking for frames for scene: {scene_name}")
+        scene_scores = []
+        
+        for frame_dir in collected_frame_dirs:
+            score = calculate_scene_frame_match(scene_name, frame_dir)
+            if score > 0:
+                scene_scores.append((frame_dir, score))
+        
+        # Sort by score in descending order
+        scene_scores.sort(key=lambda x: x[1], reverse=True)
+        scene_frame_matches[scene_name] = scene_scores
+        
+        # Get best matches
+        if scene_scores:
+            best_dir, best_score = scene_scores[0]
+            if best_score >= 10:
+                print(f"Best match for '{scene_name}': {best_dir} (score: {best_score})")
+            else:
+                print(f"No good match found for '{scene_name}' (best score: {best_score})")
+        else:
+            print(f"No matches found for '{scene_name}'")
+    
+    # Second pass: process scenes with their matched frame directories
+    for scene_data in dataset:
+        scene_name = scene_data['scene_name']
+        matched_dirs = scene_frame_matches.get(scene_name, [])
         found_frames = False
-        for base_dir in search_dirs:
-            if not os.path.exists(base_dir):
+        
+        for frame_dir, score in matched_dirs[:3]:  # Use top 3 matches
+            if score < 10:  # Skip low-scoring matches
                 continue
-                
-            # Walk through all subdirectories
-            for root, dirs, files in os.walk(base_dir):
-                if os.path.exists(root) and scene_name in root and "frames_" in root:
-                    frame_files = glob.glob(os.path.join(root, "*.jpg"))
+                    frame_files = glob.glob(os.path.join(frame_dir, "*.jpg"))
                     if frame_files:
-                        frame_dirs.append(root)
-                        print(f"Found {len(frame_files)} frames in {root}")
+                        frame_dirs.append(frame_dir)
+                        print(f"Found {len(frame_files)} frames in {frame_dir}")
                         found_frames = True
                         
-                        # Distribute frames evenly among steps
+                        # Check if we can correlate frames with animation structure
+                        # Sort frame files to ensure proper sequence
+                        sorted_frames = sorted(frame_files)
+                        
+                        # Try to infer animation points from frame timestamps or filenames
+                        timestamp_pattern = re.compile(r'_(\d+\.\d+)\.jpg$')
+                        frame_timestamps = []
+                        
+                        for frame in sorted_frames:
+                            match = timestamp_pattern.search(frame)
+                            if match:
+                                timestamp = float(match.group(1))
+                                frame_timestamps.append((frame, timestamp))
+                        
+                        if frame_timestamps:
+                            # Sort by timestamp
+                            frame_timestamps.sort(key=lambda x: x[1])
+                            sorted_frames = [f[0] for f in frame_timestamps]
+                        
+                        # Analyze frame transitions to find key points
+                        # This is a simple approach - with more time we could use image analysis
+                        key_frames = []
+                        
+                        if len(sorted_frames) <= 4:  # For very few frames, use all of them
+                            key_frames = sorted_frames
+                        else:
+                            # Take frames at regular intervals, with higher density at beginning
+                            step = max(1, len(sorted_frames) // min(20, len(scene_data.get('steps', []))))
+                            key_frames = [sorted_frames[i] for i in range(0, len(sorted_frames), step)]
+                            # Ensure first and last frames are included
+                            if sorted_frames[0] not in key_frames:
+                                key_frames.insert(0, sorted_frames[0])
+                            if sorted_frames[-1] not in key_frames:
+                                key_frames.append(sorted_frames[-1])
+                        
+                        # Distribute frames among steps
                         step_count = len(scene_data.get('steps', []))
                         if step_count > 0:
-                            sorted_frames = sorted(frame_files)
                             frames_per_step = len(sorted_frames) / step_count
                             
                             for step_idx in range(step_count):

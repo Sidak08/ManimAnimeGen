@@ -257,7 +257,15 @@ def main():
     target_path = sys.argv[1]
     output_path = sys.argv[2] if len(sys.argv) > 2 else "manim_dataset.json"
     
+    # Create output directory if it doesn't exist
+    output_dir = os.path.dirname(output_path)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    
     dataset = []
+    
+    # Expand path to handle relative paths properly
+    target_path = os.path.abspath(target_path)
     
     if os.path.isdir(target_path):
         # Process all Python files in the directory
